@@ -1,9 +1,9 @@
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from "graphql";
-import { PrismaClient } from "@prisma/client";
+import { MemberType, Post, PrismaClient, Profile, User } from "@prisma/client";
 
 import { UserType } from "./user.js";
 import { UUIDType } from "./uuid.js";
-import { MemberType } from "./member_types.js";
+import { MemberTypeGql } from "./member_types.js";
 import { PostType } from "./post.js";
 import { ProfileType } from "./profile.js";
 
@@ -13,7 +13,7 @@ export const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
-      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<unknown> => {  
+      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<User | null> => {  
         return await context.user.findUnique({
           where: {
             id: args.id,
@@ -22,10 +22,11 @@ export const RootQuery = new GraphQLObjectType({
       }
     },
     memberType: {
-      type: MemberType,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      type: MemberTypeGql,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
-      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<unknown> => {  
-        return await context.profile.findUnique({
+      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<MemberType | null> => {  
+        return await context.memberType.findUnique({
           where: {
             id: args.id,
           },
@@ -35,7 +36,7 @@ export const RootQuery = new GraphQLObjectType({
     post: {
       type: PostType,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
-      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<unknown> => {  
+      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<Post | null> => {  
         return await context.post.findUnique({
           where: {
             id: args.id,
@@ -44,9 +45,10 @@ export const RootQuery = new GraphQLObjectType({
       }
     },
     profile: {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       type: ProfileType,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
-      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<unknown> => {  
+      resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<Profile | null> => {  
         return await context.profile.findUnique({
           where: {
             id: args.id,
@@ -56,13 +58,13 @@ export const RootQuery = new GraphQLObjectType({
     },
     users: {
       type: new GraphQLList(UserType),
-      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<User[]> => {  
         return await context.user.findMany();
       }
     },
     memberTypes: {
-      type: new GraphQLList(MemberType),
-      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+      type: new GraphQLList(MemberTypeGql),
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<MemberType[]> => {  
         return await context.memberType.findMany();
       }
     },
@@ -74,7 +76,7 @@ export const RootQuery = new GraphQLObjectType({
     },
     profiles: {
       type: new GraphQLList(ProfileType),
-      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<Profile[]> => {  
         return await context.profile.findMany();
       }
     },
