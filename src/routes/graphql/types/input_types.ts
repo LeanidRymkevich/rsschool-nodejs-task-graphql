@@ -36,3 +36,12 @@ export const ProfileChangeInput = new GraphQLInputObjectType({
     memberTypeId: { type: MemberTypeIdEnum },
   },
 });
+
+export const PostCreateInput = new GraphQLInputObjectType({
+  name: 'PostCreateInput',
+  fields: {
+    authorId: { type: UUIDType },
+    content: { type: GraphQLString },
+    title: { type: GraphQLString },
+  },
+});

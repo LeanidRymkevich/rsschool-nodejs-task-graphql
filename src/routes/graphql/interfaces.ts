@@ -1,4 +1,4 @@
-import { PrismaClient, Profile, User } from "@prisma/client";
+import { Post, PrismaClient, Profile, User } from "@prisma/client";
 
 export interface IContext {
   prisma: PrismaClient
@@ -29,4 +29,13 @@ export interface ICreateProfileData {
 export interface IChangeProfileData {
   id: string;
   dto: Omit<Profile, 'id'>;
+};
+
+export interface ICreatePostData {
+  dto: Omit<Post, 'id'>;
+};
+
+export interface IChangePostData {
+  id: string;
+  dto: Omit<Post, 'id'>;
 };

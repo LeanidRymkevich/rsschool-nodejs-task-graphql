@@ -1,10 +1,12 @@
 import { GraphQLObjectType, GraphQLNonNull } from "graphql";
-import { Profile, User } from "@prisma/client";
+import { Post, Profile, User } from "@prisma/client";
 
 import { 
+  IChangePostData,
   IChangeProfileData,
   IChangeUserData, 
   IContext, 
+  ICreatePostData, 
   ICreateProfileData, 
   ICreateUserData, 
   ISource, 
@@ -13,12 +15,14 @@ import {
 
 import { UserType } from "./user.js";
 import {
+  PostCreateInput,
   ProfileChangeInput,
   ProfileCreateInput, 
   UserCreateInput 
 } from "./input_types.js";
 import { UUIDType } from "./uuid.js";
 import { ProfileType } from "./profile.js";
+import { PostType } from "./post.js";
 
 export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectType({
   name: 'Mutation',
@@ -48,7 +52,7 @@ export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectT
       },
     },
     subscribeTo: {
-      type: UserType as GraphQLObjectType,
+      type: UserType,
       args: {
         userId: { type: new GraphQLNonNull(UUIDType) },
         authorId: { type: new GraphQLNonNull(UUIDType) },
@@ -85,7 +89,7 @@ export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectT
       },
     },
     changeProfile: {
-      type: ProfileType as GraphQLObjectType,
+      type: ProfileType,
       args: {
         id: { type: new GraphQLNonNull(UUIDType) },
         dto: { type: ProfileChangeInput },
@@ -101,6 +105,29 @@ export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectT
         await prisma.profile.delete({ where: { id: args.id } });
       },
     },
-  
+    createPost: {
+      type: PostType,
+      args: { dto: { type: new GraphQLNonNull(PostCreateInput) } },
+      resolve: async (_source, args: ICreatePostData, { prisma }): Promise<Post> => {
+        return await  prisma.post.create({ data: args.dto });
+      },
+    },
+    changePost: {
+      type: PostType,
+      args: { 
+        id: { type: new GraphQLNonNull(UUIDType) }, 
+        dto: { type: PostCreateInput } 
+      },
+      resolve: async (_source, args: IChangePostData, { prisma }): Promise<Post> => {
+        return await prisma.post.update({ where: { id: args.id }, data: args.dto });
+      },
+    },
+    deletePost: {
+      type: UUIDType,
+      args: { id: { type: new GraphQLNonNull(UUIDType) } },
+      resolve: async (_source, args: {id: string}, { prisma }): Promise<void> => {
+        await prisma.post.delete({ where: { id: args.id } });
+      },
+    },
   },
 });
