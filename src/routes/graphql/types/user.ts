@@ -40,7 +40,7 @@ export const UserType: GraphQLObjectType<User, IContext> = new GraphQLObjectType
     userSubscribedTo: {
       type: new GraphQLList(UserType),
       resolve: async (source, _args, { prisma }): Promise<User[]> => {
-        return prisma.user.findMany({ where: { userSubscribedTo: { some: { subscriberId: source.id } } } });
+        return prisma.user.findMany({ where: { subscribedToUser: { some: { subscriberId: source.id } } } });
       },
     }
   })
