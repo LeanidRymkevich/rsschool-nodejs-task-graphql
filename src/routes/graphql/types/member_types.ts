@@ -19,7 +19,7 @@ export const MemberTypeIdEnum = new GraphQLEnumType({
   },
 });
 
-export const MemberTypeGql = new GraphQLObjectType({
+export const MemberTypeGql: GraphQLObjectType = new GraphQLObjectType({
   name: 'MemberType',
   fields: {
     id: { type: new GraphQLNonNull(MemberTypeIdEnum) },

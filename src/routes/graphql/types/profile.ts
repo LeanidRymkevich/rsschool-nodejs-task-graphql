@@ -10,7 +10,7 @@ import { UUIDType } from "./uuid.js";
 import { MemberTypeGql, MemberTypeIdEnum } from "./member_types.js";
 import { UserType } from "./user.js";
 
-export const ProfileType = new GraphQLObjectType({
+export const ProfileType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Profile',
   fields: {
     id: {type: new GraphQLNonNull(UUIDType)},
@@ -25,7 +25,6 @@ export const ProfileType = new GraphQLObjectType({
       },
     },
     memberType: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       type: MemberTypeGql,
       resolve: async (source: Profile, _args: unknown, context: PrismaClient): Promise<MemberType | null> => {
         return await context.memberType.findUnique({ where: { id: source.memberTypeId } }); 

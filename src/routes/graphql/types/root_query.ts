@@ -22,7 +22,6 @@ export const RootQuery = new GraphQLObjectType({
       }
     },
     memberType: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       type: MemberTypeGql,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
       resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<MemberType | null> => {  
@@ -45,7 +44,6 @@ export const RootQuery = new GraphQLObjectType({
       }
     },
     profile: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       type: ProfileType,
       args: {id: {type: new GraphQLNonNull(UUIDType)}},
       resolve: async (_source: unknown, args: {id: string}, context: PrismaClient): Promise<Profile | null> => {  
