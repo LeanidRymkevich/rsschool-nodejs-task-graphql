@@ -5,7 +5,7 @@ import { IContext, ISource } from "../interfaces.js";
 
 import { UserType } from "./user.js";
 import { UUIDType } from "./uuid.js";
-import { MemberTypeGql } from "./member_types.js";
+import { MemberTypeGql, MemberTypeIdEnum } from "./member_types.js";
 import { PostType } from "./post.js";
 import { ProfileType } from "./profile.js";
 
@@ -21,7 +21,7 @@ export const RootQuery = new GraphQLObjectType<ISource, IContext>({
     },
     memberType: {
       type: MemberTypeGql,
-      args: {id: {type: new GraphQLNonNull(UUIDType)}},
+      args: {id: {type: new GraphQLNonNull(MemberTypeIdEnum)}},
       resolve: async (_source, args: {id: string}, {prisma}): Promise<MemberType | null> => {  
         return await prisma.memberType.findUnique({ where: { id: args.id } });
       }
