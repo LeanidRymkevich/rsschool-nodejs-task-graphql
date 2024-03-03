@@ -4,6 +4,8 @@ import { graphql } from 'graphql';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { gqlTypesSchema } from './schemas.js';
 
+const UNKNOWN_ERR_MSG = 'Unknown error';
+
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { prisma } = fastify;
 
@@ -17,13 +19,20 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
     },
     async handler(req) {
-      return graphql({
-        schema: gqlTypesSchema, // TODO make a appropriate Schema
-        source: req.body.query,
-        rootValue: {}, // TODO make a rootValue
-        contextValue: prisma,
-        variableValues: req.body.variables
-      });
+      const {query, variables} = req.body;
+
+       try {
+        return await graphql({
+          schema: gqlTypesSchema,
+          source: query,
+          contextValue: prisma,
+          variableValues: variables
+        });
+       } catch (err) {
+        const msg = err instanceof Error ? (err.message || UNKNOWN_ERR_MSG) : UNKNOWN_ERR_MSG;
+
+        return {errors: [msg]};
+       }
     },
   });
 };
