@@ -1,17 +1,24 @@
 import { GraphQLObjectType, GraphQLNonNull } from "graphql";
-import { User } from "@prisma/client";
+import { Profile, User } from "@prisma/client";
 
 import { 
+  IChangeProfileData,
   IChangeUserData, 
   IContext, 
+  ICreateProfileData, 
   ICreateUserData, 
   ISource, 
   ISubscribeToData
 } from "../interfaces.js";
 
 import { UserType } from "./user.js";
-import { UserCreateInput } from "./input_types.js";
+import {
+  ProfileChangeInput,
+  ProfileCreateInput, 
+  UserCreateInput 
+} from "./input_types.js";
 import { UUIDType } from "./uuid.js";
+import { ProfileType } from "./profile.js";
 
 export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectType({
   name: 'Mutation',
@@ -70,5 +77,30 @@ export const mutation: GraphQLObjectType<ISource, IContext> = new GraphQLObjectT
         });
       },
     },
+    createProfile: {
+      type: ProfileType,
+      args: { dto: { type: new GraphQLNonNull(ProfileCreateInput) } },
+      resolve: async (_source, args: ICreateProfileData, { prisma }): Promise<Profile> => {
+        return await  prisma.profile.create({ data: args.dto });
+      },
+    },
+    changeProfile: {
+      type: ProfileType as GraphQLObjectType,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+        dto: { type: ProfileChangeInput },
+      },
+      resolve: async (_source, args: IChangeProfileData, { prisma }): Promise<Profile> => {
+        return await prisma.profile.update({ where: { id: args.id }, data: args.dto });
+      },
+    },
+    deleteProfile: {
+      type: UUIDType,
+      args: { id: { type: new GraphQLNonNull(UUIDType) } },
+      resolve: async (_source, args: {id: string}, { prisma }): Promise<void> => {
+        await prisma.profile.delete({ where: { id: args.id } });
+      },
+    },
+  
   },
 });
