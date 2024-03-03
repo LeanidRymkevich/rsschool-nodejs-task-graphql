@@ -1,4 +1,4 @@
-import { GraphQLNonNull, GraphQLObjectType } from "graphql";
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from "graphql";
 import { PrismaClient } from "@prisma/client";
 
 import { UserType } from "./user.js";
@@ -18,7 +18,7 @@ export const RootQuery = new GraphQLObjectType({
           where: {
             id: args.id,
           },
-        });;
+        });
       }
     },
     memberType: {
@@ -29,7 +29,7 @@ export const RootQuery = new GraphQLObjectType({
           where: {
             id: args.id,
           },
-        });;
+        });
       }
     },
     post: {
@@ -40,7 +40,7 @@ export const RootQuery = new GraphQLObjectType({
           where: {
             id: args.id,
           },
-        });;
+        });
       }
     },
     profile: {
@@ -51,8 +51,32 @@ export const RootQuery = new GraphQLObjectType({
           where: {
             id: args.id,
           },
-        });;
+        });
       }
-    }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+        return await context.user.findMany();
+      }
+    },
+    memberTypes: {
+      type: new GraphQLList(MemberType),
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+        return await context.memberType.findMany();
+      }
+    },
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+        return await context.post.findMany();
+      }
+    },
+    profiles: {
+      type: new GraphQLList(ProfileType),
+      resolve: async (_source: unknown, _args: unknown, context: PrismaClient): Promise<unknown> => {  
+        return await context.profile.findMany();
+      }
+    },
   }
 });
