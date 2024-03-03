@@ -49,7 +49,7 @@ export const RootMutation: GraphQLObjectType<ISource, IContext> = new GraphQLObj
     deleteUser: {
       type: UUIDType,
       args: { id: { type: new GraphQLNonNull(UUIDType) } },
-      resolve: async (_source: unknown, args: {id: string}, { prisma }): Promise<string> => {
+      resolve: async (_source: unknown, args: { id: string }, { prisma }): Promise<string> => {
         await prisma.user.delete({ where: { id: args.id } });
         return args.id;
       },
@@ -105,7 +105,7 @@ export const RootMutation: GraphQLObjectType<ISource, IContext> = new GraphQLObj
     deleteProfile: {
       type: UUIDType,
       args: { id: { type: new GraphQLNonNull(UUIDType) } },
-      resolve: async (_source, args: {id: string}, { prisma }): Promise<string> => {
+      resolve: async (_source, args: { id: string }, { prisma }): Promise<string> => {
         await prisma.profile.delete({ where: { id: args.id } });
         return args.id;
       },
@@ -130,7 +130,7 @@ export const RootMutation: GraphQLObjectType<ISource, IContext> = new GraphQLObj
     deletePost: {
       type: UUIDType,
       args: { id: { type: new GraphQLNonNull(UUIDType) } },
-      resolve: async (_source, args: {id: string}, { prisma }): Promise<string> => {
+      resolve: async (_source, args: { id: string }, { prisma }): Promise<string> => {
         await prisma.post.delete({ where: { id: args.id } });
         return args.id;
       },

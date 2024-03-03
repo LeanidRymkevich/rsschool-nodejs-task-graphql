@@ -16,9 +16,9 @@ import { ProfileType } from "./profile.js";
 export const UserType: GraphQLObjectType<User, IContext> = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: {type: new GraphQLNonNull(UUIDType)},
-    name: {type: new GraphQLNonNull(GraphQLString)},
-    balance: { type: new GraphQLNonNull(GraphQLFloat)},
+    id: { type: new GraphQLNonNull(UUIDType) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    balance: { type: new GraphQLNonNull(GraphQLFloat) },
     posts: {
       type: new GraphQLList(PostType),
       resolve: async (source, _args, { prisma }): Promise<Post[]> => {

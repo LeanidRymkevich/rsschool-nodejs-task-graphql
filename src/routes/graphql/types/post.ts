@@ -9,13 +9,13 @@ import { UserType } from "./user.js";
 export const PostType: GraphQLObjectType<Post, IContext> = new GraphQLObjectType({
   name: 'Post',
   fields: () =>({
-    id: {type: new GraphQLNonNull(UUIDType)},
-    title: {type: new GraphQLNonNull(GraphQLString)},
-    content: {type: new GraphQLNonNull(GraphQLString)},
+    id: { type: new GraphQLNonNull(UUIDType) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    content: { type: new GraphQLNonNull(GraphQLString) },
     author: {
       type: UserType,
       resolve: async (source, _args, { prisma }): Promise<User | null> => {
-        return await prisma.user.findUnique({ where: { id: source.authorId} }); 
+        return await prisma.user.findUnique({ where: { id: source.authorId } }); 
       },
     },
   }),

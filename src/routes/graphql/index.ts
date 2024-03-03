@@ -1,9 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { GraphQLError, graphql, parse, validate } from 'graphql';
+import depthLimit from 'graphql-depth-limit';
 
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { gqlTypesSchema } from './schemas.js';
-import depthLimit from 'graphql-depth-limit';
 
 const UNKNOWN_ERR_MSG = 'Unknown error';
 const DEPTH_LIMIT = 5;

@@ -15,11 +15,11 @@ import { UserType } from "./user.js";
 export const ProfileType: GraphQLObjectType<Profile, IContext> = new GraphQLObjectType({
   name: 'Profile',
   fields: () => ({
-    id: {type: new GraphQLNonNull(UUIDType)},
-    isMale: {type: new GraphQLNonNull(GraphQLBoolean)},
-    yearOfBirth: {type: new GraphQLNonNull(GraphQLInt)},
-    userId: {type: new GraphQLNonNull(UUIDType)},
-    memberTypeId: {type: new GraphQLNonNull(MemberTypeIdEnum)},
+    id: { type: new GraphQLNonNull(UUIDType) },
+    isMale: { type: new GraphQLNonNull(GraphQLBoolean) },
+    yearOfBirth: { type: new GraphQLNonNull(GraphQLInt) },
+    userId: { type: new GraphQLNonNull(UUIDType) },
+    memberTypeId: { type: new GraphQLNonNull(MemberTypeIdEnum) },
     user: {
       type: UserType,
       resolve: async (source, _args, { prisma }): Promise<User | null> => {
